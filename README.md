@@ -1,4 +1,4 @@
-# Account registration page for AZA-Explorers educational game
+## Account registration page for AZA-Explorers educational game
 
 - 🔭 **Site Preview**
 
