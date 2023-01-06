@@ -1,3 +1,5 @@
+# Account registration page for AZA-Explorers educational game
+
 - 🔭 **Site Preview**
 
 <p align="center"> 
