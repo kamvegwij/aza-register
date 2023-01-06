@@ -54,21 +54,21 @@
 								$fname = $lname = $username = "";
 								$psw = $psw_repeat = "";
 
-							if (isset($_POST['submit'])) {
-								require('server/util.php');
-								// utility functions
-								$util = new Util();
-								$conn = $util->conn;
+								if (isset($_POST['submit'])) {
+									require('server/util.php');
+									// utility functions
+									$util = new Util();
+									$conn = $util->conn;
 
-								$fname = $util->strip($_POST['fname']);
-								$lname = $util->strip($_POST['lname']);
-								$username = $util->strip_username($_POST['username']);
+									$fname = $util->strip($_POST['fname']);
+									$lname = $util->strip($_POST['lname']);
+									$username = $util->strip_username($_POST['username']);
 
-								$grade = intval($_POST['grade']);
+									$grade = intval($_POST['grade']);
 
-								$psw = mysqli_real_escape_string($conn, $_POST['psw']);
-								$psw_repeat = mysqli_real_escape_string($conn, $_POST['psw2']);
-							}
+									$psw = mysqli_real_escape_string($conn, $_POST['psw']);
+									$psw_repeat = mysqli_real_escape_string($conn, $_POST['psw2']);
+								}
 							?>
 
 							<form class="" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
@@ -107,7 +107,7 @@
 							<div class="d-flex flex-row mb-4">
 								<p class="m-0 p-1 h4 fw-semibold me-2">Subjects:</p>
 
-								<select id="multiple-checkboxes" multiple="multiple" name="subjects">
+								<select id="multiple-checkboxes" multiple="multiple" name="subjects[]">
 									<option value="geography">Geography</option>
 									<option value="natural sciences">Natural Sciences</option>
 									<option value="mathematics">Mathematics</option>
@@ -124,45 +124,50 @@
 								<label class="form-label text-dark" for="typePassword">Repeat Password</label>
 							</div>
 
-							<?php 
-							if (isset($_POST['submit'])) {
-								if ($psw !== $psw_repeat) {
-									echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
-											<strong>passwords</strong> do not match, please try again.
-										</div>";
-								}
-								elseif ( $util->usernameExists($username) ) {
-									echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
-											unable to register account, <strong>username</strong> already exists
-										</div>";                                       
-								}
-								else {
-									// hash the password to store
-									$psw = password_hash($psw, PASSWORD_DEFAULT);
-									$userID = uniqid("LNR-");
+							<?php
+								if (isset($_POST['submit'])) {
+									foreach ($_POST['subjects'] as $subject) {
+									echo $subject. "\n";
+									} 
+									die;
 
-
-									$query = "INSERT INTO users (userID, name, surname, grade, username, password, type)
-											VALUES ('$userID', '$fname', '$lname', '$grade', '$username', '$psw', 'learner');";
-									$result = mysqli_query($conn, $query);
-
-									if ($result == false) {
+									if ($psw !== $psw_repeat) {
 										echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
-											unable to add account, please make sure all details are valid
-										</div>";
-									} else {
-										echo "<div class='alert alert-success my-2 p-2 text-center' role='alert'>
-											Account successfully created, you can now close the page and log in to the game.
-										</div>";
+												<strong>passwords</strong> do not match, please try again.
+											</div>";
 									}
-								}
+									elseif ( $util->usernameExists($username) ) {
+										echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
+												unable to register account, <strong>username</strong> already exists
+											</div>";                                       
+									}
+									else {
+										// hash the password to store
+										$psw = password_hash($psw, PASSWORD_DEFAULT);
+										$userID = uniqid("LNR-");
 
-								// TODO
-								// Language Select
-								// Add subjects
-								// Update page
-								// Optional: Select Avatar
-							}
+
+										$query = "INSERT INTO users (userID, name, surname, grade, username, password, type)
+												VALUES ('$userID', '$fname', '$lname', '$grade', '$username', '$psw', 'learner');";
+										$result = mysqli_query($conn, $query);
+
+										if ($result == false) {
+											echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
+												unable to add account, please make sure all details are valid
+											</div>";
+										} else {
+											echo "<div class='alert alert-success my-2 p-2 text-center' role='alert'>
+												Account successfully created, you can now close the page and log in to the game.
+											</div>";
+										}
+									}
+
+									// TODO
+									// Language Select
+									// Add subjects
+									// Update page
+									// Optional: Select Avatar
+								}
 							?>
 
 							<!-- Submit button -->
