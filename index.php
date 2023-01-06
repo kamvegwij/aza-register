@@ -1,4 +1,9 @@
-<?php include("components/head.inc.php"); ?>
+<?php
+	// TODO
+	// Disable debugging mode
+	ini_set('display_errors', 1); // enable debugging and error display
+	include("components/head.inc.php");
+?>
 
 	<title>AZA Explorers: Register</title>
 
@@ -126,10 +131,8 @@
 
 							<?php
 								if (isset($_POST['submit'])) {
-									foreach ($_POST['subjects'] as $subject) {
-									echo $subject. "\n";
-									} 
-									die;
+									
+									$subject_list = $_POST['subjects'];
 
 									if ($psw !== $psw_repeat) {
 										echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
@@ -141,11 +144,15 @@
 												unable to register account, <strong>username</strong> already exists
 											</div>";                                       
 									}
+									elseif (empty($subject_list)) {
+										echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
+											please select at least one subject
+										</div>"; 
+									}
 									else {
 										// hash the password to store
 										$psw = password_hash($psw, PASSWORD_DEFAULT);
 										$userID = uniqid("LNR-");
-
 
 										$query = "INSERT INTO users (userID, name, surname, grade, username, password, type)
 												VALUES ('$userID', '$fname', '$lname', '$grade', '$username', '$psw', 'learner');";
@@ -160,12 +167,29 @@
 												Account successfully created, you can now close the page and log in to the game.
 											</div>";
 										}
+
+										// add subjects for new user 
+										// reset existing variables
+										$query = "";
+										$result = false; 
+										foreach ($subject_list as $subject) {
+											$query = "INSERT INTO subjects (userID, name)
+												VALUES ('$userID', '$subject');";
+											$result = mysqli_query($conn, $query);
+										}
+
+										if ($result == false) {
+											echo "<div class='alert alert-danger my-2 p-2 text-center' role='alert'>
+												unable to add selected subject(s), please contact account administrator
+											</div>";
+										} else {
+											echo "<div class='alert alert-success my-2 p-2 text-center' role='alert'>
+												subject(s) added successfully!
+											</div>";
+										}
 									}
 
 									// TODO
-									// Language Select
-									// Add subjects
-									// Update page
 									// Optional: Select Avatar
 								}
 							?>
