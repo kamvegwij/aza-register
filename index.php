@@ -12,6 +12,7 @@
 
 	html, body, .intro {
 		font-family: mochiyPopOneFont;
+		font-size: 1rem;
 		height: 1300px;
 	}
 
@@ -93,13 +94,23 @@
 								<label class="form-label text-dark" for="form6Example5">Username</label>
 							</div>
 
-							<div class="d-flex flex-row">
-								<p class="m-0 p-1 h4 fw-semibold">Grade:</p>
+							<div class="d-flex flex-row mb-4">
+								<p class="m-0 p-1 h4 fw-semibold me-2">Grade:</p>
 
-								<select id="grade" name="grade" class="form-select mb-4 bg-warning" aria-label="Default select example">
+								<select id="grade" name="grade" class="form-select" aria-label="Default select example">
 									<option value="5" selected>5</option>
 									<option value="6">6</option>
 									<option value="7">7</option>
+								</select>
+							</div>
+
+							<div class="d-flex flex-row mb-4">
+								<p class="m-0 p-1 h4 fw-semibold me-2">Subjects:</p>
+
+								<select id="multiple-checkboxes" multiple="multiple" name="subjects">
+									<option value="geography">Geography</option>
+									<option value="natural sciences">Natural Sciences</option>
+									<option value="mathematics">Mathematics</option>
 								</select>
 							</div>
 
